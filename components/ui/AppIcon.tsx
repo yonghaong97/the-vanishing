@@ -24,12 +24,30 @@ const icons: Record<string, React.ReactNode> = {
       <path d="M20 6h-8l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2Z"/>
     </svg>
   ),
+  trace: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+      <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="11" cy="11" r="3"/>
+      <line x1="16.5" y1="16.5" x2="22" y2="22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="11" y1="3" x2="11" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="11" y1="21" x2="11" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="3" y1="11" x2="1" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  recovery: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+      <path d="M12 2a10 10 0 0 0-7.35 16.76L3 21h4.5A10 10 0 1 0 12 2Zm0 18a8 8 0 1 1 4.9-14.37L14 8h6V2l-2.1 2.1A9.96 9.96 0 0 0 12 2Z" opacity="0.3"/>
+      <path d="M12 4a8 8 0 0 0-5.66 13.66L4 20h4a8 8 0 1 0 4-14.93V4ZM13 12l-4-4v3H5v2h4v3l4-4Z"/>
+    </svg>
+  ),
 };
 
 const iconBg: Record<string, string> = {
-  chat:    'bg-ios-green',
-  gallery: 'bg-ios-indigo',
-  files:   'bg-amber-600',
+  chat:     'bg-ios-green',
+  gallery:  'bg-ios-indigo',
+  files:    'bg-amber-600',
+  trace:    'bg-red-700',
+  recovery: 'bg-slate-600',
 };
 
 export default function AppIcon({ icon, label, locked, onClick }: Props) {

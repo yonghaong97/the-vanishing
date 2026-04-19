@@ -17,15 +17,17 @@ import type { StoryEvent, StoryContext, Effect } from './types';
 type MachineActor = Actor<typeof storyMachine>;
 
 interface StoryCtxValue {
-  snapshot:       SnapshotFrom<typeof storyMachine>;
-  send:           MachineActor['send'];
+  snapshot:         SnapshotFrom<typeof storyMachine>;
+  send:             MachineActor['send'];
   /** Convenience: the current XState context */
-  ctx:            StoryContext;
+  ctx:              StoryContext;
   /** Shorthand helpers so components don't import storyMachine directly */
-  completeNode:   (nodeId: string, contactId: string, nextNodeId?: string) => void;
-  makeChoice:     (nodeId: string, contactId: string, choiceId: string, nextNodeId: string, effects: Effect[]) => void;
-  applyEffects:   (effects: Effect[]) => void;
-  resetStory:     () => void;
+  completeNode:     (nodeId: string, contactId: string, nextNodeId?: string) => void;
+  makeChoice:       (nodeId: string, contactId: string, choiceId: string, nextNodeId: string, effects: Effect[], choiceText: string) => void;
+  applyEffects:     (effects: Effect[]) => void;
+  markContactRead:    (contactId: string) => void;
+  reconstructPhoto:   (photoId: string, cost?: number) => void;
+  resetStory:         () => void;
 }
 
 const StoryContext = createContext<StoryCtxValue | null>(null);
@@ -37,8 +39,6 @@ export function StoryProvider({ children }: { children: React.ReactNode }) {
 
   const [snapshot, send] = useMachine(storyMachine, {
     input: saved.current ?? initialContext,
-    // Restore context if we have a saved one
-    ...(saved.current ? { snapshot: { value: 'playing', context: saved.current, status: 'active' } as never } : {}),
   });
 
   // Persist on every context change
@@ -46,16 +46,22 @@ export function StoryProvider({ children }: { children: React.ReactNode }) {
     saveContext(snapshot.context);
   }, [snapshot.context]);
 
-  const ctx = snapshot.context;
+  const ctx = snapshot.context ?? initialContext;
 
   const completeNode = (nodeId: string, contactId: string, nextNodeId?: string) =>
     send({ type: 'COMPLETE_NODE', nodeId, contactId, nextNodeId });
 
-  const makeChoice = (nodeId: string, contactId: string, choiceId: string, nextNodeId: string, effects: Effect[]) =>
-    send({ type: 'MAKE_CHOICE', nodeId, contactId, choiceId, nextNodeId, effects });
+  const makeChoice = (nodeId: string, contactId: string, choiceId: string, nextNodeId: string, effects: Effect[], choiceText: string) =>
+    send({ type: 'MAKE_CHOICE', nodeId, contactId, choiceId, nextNodeId, effects, choiceText });
 
   const applyEffects = (effects: Effect[]) =>
     send({ type: 'APPLY_EFFECTS', effects });
+
+  const markContactRead = (contactId: string) =>
+    send({ type: 'MARK_CONTACT_READ', contactId });
+
+  const reconstructPhoto = (photoId: string, cost = 20) =>
+    send({ type: 'RECONSTRUCT_PHOTO', photoId, cost });
 
   const resetStory = () => {
     send({ type: 'RESET' });
@@ -63,7 +69,7 @@ export function StoryProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <StoryContext.Provider value={{ snapshot, send, ctx, completeNode, makeChoice, applyEffects, resetStory }}>
+    <StoryContext.Provider value={{ snapshot, send, ctx, completeNode, makeChoice, applyEffects, markContactRead, reconstructPhoto, resetStory }}>
       {children}
     </StoryContext.Provider>
   );

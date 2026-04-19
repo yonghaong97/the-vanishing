@@ -46,21 +46,25 @@ function applyEffects(ctx: StoryContext, effects: Effect[]): Partial<StoryContex
 // ─── Initial context (matches the story.json defaults) ───────────────────────
 
 export const initialContext: StoryContext = {
-  currentNodes:     {},
-  completedNodes:   [],
-  unlockedApps:     ['chat'],
-  unlockedContacts: ['jordan'],
-  discoveredFiles:  [],
-  flags:            {},
-  choices:          {},
+  currentNodes:        {},
+  completedNodes:      [],
+  unlockedApps:        ['chat'],
+  unlockedContacts:    ['jordan'],
+  discoveredFiles:     [],
+  flags:               {},
+  choices:             {},
+  readContacts:        [],
+  choiceTexts:         {},
+  systemIntegrity:     100,
+  reconstructedPhotos: [],
 };
 
 // ─── Machine definition ───────────────────────────────────────────────────────
 
 export const storyMachine = createMachine({
   id: 'story',
-  types: {} as { context: StoryContext; events: StoryEvent },
-  context: initialContext,
+  types: {} as { context: StoryContext; events: StoryEvent; input: StoryContext },
+  context: ({ input }) => ({ ...initialContext, ...input }),
 
   // Single top-level state — branching lives in the JSON, not in XState states.
   // We use XState here for its excellent assign() model and devtools support.
@@ -90,12 +94,13 @@ export const storyMachine = createMachine({
          */
         MAKE_CHOICE: {
           actions: assign(({ context, event }) => {
-            const { nodeId, contactId, choiceId, nextNodeId, effects } = event;
+            const { nodeId, contactId, choiceId, nextNodeId, effects, choiceText } = event;
             const choices = { ...context.choices, [nodeId]: choiceId };
+            const choiceTexts = { ...context.choiceTexts, [nodeId]: choiceText };
             const currentNodes = { ...context.currentNodes, [contactId]: nextNodeId };
             const completedNodes = [...new Set([...context.completedNodes, nodeId])];
             const effectPatch = applyEffects(context, effects);
-            return { choices, currentNodes, completedNodes, ...effectPatch };
+            return { choices, choiceTexts, currentNodes, completedNodes, ...effectPatch };
           }),
         },
 
@@ -105,6 +110,19 @@ export const storyMachine = createMachine({
          */
         APPLY_EFFECTS: {
           actions: assign(({ context, event }) => applyEffects(context, event.effects)),
+        },
+
+        MARK_CONTACT_READ: {
+          actions: assign(({ context, event }) => ({
+            readContacts: [...new Set([...context.readContacts, event.contactId])],
+          })),
+        },
+
+        RECONSTRUCT_PHOTO: {
+          actions: assign(({ context, event }) => ({
+            reconstructedPhotos: [...new Set([...context.reconstructedPhotos, event.photoId])],
+            systemIntegrity: Math.max(0, context.systemIntegrity - event.cost),
+          })),
         },
 
         /**
