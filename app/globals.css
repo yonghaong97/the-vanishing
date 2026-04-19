@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent horizontal scroll on root */
+html, body { overflow-x: hidden; }
+
+/* Smooth scrolling inside scroll containers */
+.scroll-smooth-ios {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Bubble tail variants */
+.bubble-tail-right::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+
+.bubble-tail-left::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+/* Phone glass shine */
+.phone-shine {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.06) 0%,
+    transparent 50%,
+    rgba(255,255,255,0.02) 100%
+  );
+}
