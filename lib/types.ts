@@ -33,6 +33,13 @@ export interface StoryNode {
   effects?: Effect[];
 }
 
+export interface HistoryMessage {
+  id: string;
+  sender: 'alex' | 'contact';
+  text: string;
+  timestamp: string;
+}
+
 export interface Contact {
   id: string;
   name: string;
@@ -44,6 +51,7 @@ export interface Contact {
 export interface Conversation {
   contactId: string;
   startNodeId: string;
+  history?: HistoryMessage[];
   nodes: Record<string, StoryNode>;
 }
 
@@ -57,11 +65,22 @@ export interface AppDef {
 
 export interface GalleryItem {
   id: string;
-  type: 'screenshot' | 'document' | 'photo';
+  type: 'screenshot' | 'document' | 'photo' | 'corrupted';
   label: string;
   description: string;
+  reconstructedContent?: string;
   color: string;
   date: string;
+  hidden?: boolean;
+  imagePath?: string;
+  clue?: { label: string; text: string };
+}
+
+export interface DeletedFile {
+  id: string;
+  name: string;
+  recoverable: boolean;
+  partialContent: string;
 }
 
 export interface FileItem {
@@ -101,10 +120,20 @@ export interface StoryContext {
   flags:            Record<string, boolean>;
   /** nodeId → choiceId the player selected */
   choices:          Record<string, string>;
+  /** Contact IDs the player has opened (for unread tracking) */
+  readContacts:     string[];
+  /** nodeId → player's choice text (for history replay after re-open) */
+  choiceTexts:      Record<string, string>;
+  /** 0–100 — depleted by reconstruction and recovery actions */
+  systemIntegrity:  number;
+  /** Gallery item IDs the player has reconstructed */
+  reconstructedPhotos: string[];
 }
 
 export type StoryEvent =
-  | { type: 'COMPLETE_NODE';     nodeId: string; contactId: string; nextNodeId?: string }
-  | { type: 'MAKE_CHOICE';       nodeId: string; contactId: string; choiceId: string; nextNodeId: string; effects: Effect[] }
-  | { type: 'APPLY_EFFECTS';     effects: Effect[] }
+  | { type: 'COMPLETE_NODE';       nodeId: string; contactId: string; nextNodeId?: string }
+  | { type: 'MAKE_CHOICE';         nodeId: string; contactId: string; choiceId: string; nextNodeId: string; effects: Effect[]; choiceText: string }
+  | { type: 'APPLY_EFFECTS';       effects: Effect[] }
+  | { type: 'MARK_CONTACT_READ';   contactId: string }
+  | { type: 'RECONSTRUCT_PHOTO';   photoId: string; cost: number }
   | { type: 'RESET' };

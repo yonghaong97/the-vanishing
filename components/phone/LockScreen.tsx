@@ -41,7 +41,8 @@ export default function LockScreen({ onUnlock }: Props) {
       </div>
 
       {/* Time + date */}
-      <div className="mt-12 text-center text-white">
+      <div className="mt-8 text-center text-white">
+        <p className="text-[11px] uppercase tracking-[0.25em] text-white/30 mb-3">This isn&apos;t your phone.</p>
         <div className="text-[80px] font-extralight tracking-tight leading-none">{time}</div>
         <div className="mt-2 text-[17px] font-light opacity-80">{date}</div>
       </div>

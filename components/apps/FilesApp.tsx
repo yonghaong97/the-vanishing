@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+
 import StatusBar from '@/components/phone/StatusBar';
 import { useStory } from '@/lib/storyContext';
 import story from '@/content/story.json';
@@ -25,15 +26,18 @@ interface Props {
 export default function FilesApp({ onBack }: Props) {
   const { ctx, applyEffects } = useStory();
   const allFiles = story.files.items as FileItem[];
-  // Show all files but dim undiscovered ones
   const [selected, setSelected] = useState<FileItem | null>(null);
 
   const handleOpen = (file: FileItem) => {
-    // Mark as discovered when first opened
     if (!ctx.discoveredFiles.includes(file.id)) {
       applyEffects([{ type: 'discover_file', fileId: file.id }]);
     }
     setSelected(file);
+  };
+
+  const isPinned = (id: string) => ctx.flags[`pinned_${id}`] ?? false;
+  const togglePin = (file: FileItem) => {
+    applyEffects([{ type: 'set_flag', flag: `pinned_${file.id}`, value: !isPinned(file.id) }]);
   };
 
   return (
@@ -132,6 +136,19 @@ export default function FilesApp({ onBack }: Props) {
                   {selected.content}
                 </pre>
               </div>
+
+              {/* Pin to Board */}
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => togglePin(selected)}
+                className={`w-full mt-4 py-3 rounded-xl text-[13px] font-medium transition-colors ${
+                  isPinned(selected.id)
+                    ? 'bg-red-950/40 text-red-400 border border-red-700/40'
+                    : 'bg-ios-surface2 text-ios-blue border border-ios-separator'
+                }`}
+              >
+                {isPinned(selected.id) ? '📌 Pinned to Board — tap to unpin' : '📌 Pin to Investigation Board'}
+              </motion.button>
             </div>
           </motion.div>
         )}

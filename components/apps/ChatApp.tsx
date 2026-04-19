@@ -21,7 +21,7 @@ import TypingIndicator from '@/components/ui/TypingIndicator';
 import ChoicePanel from '@/components/ui/ChoicePanel';
 import StatusBar from '@/components/phone/StatusBar';
 import story from '@/content/story.json';
-import type { Choice, Contact, Conversation, StoryMessage, StoryNode } from '@/lib/types';
+import type { Choice, Contact, Conversation, HistoryMessage, StoryMessage, StoryNode } from '@/lib/types';
 
 // ─── Types & helpers ──────────────────────────────────────────────────────────
 
@@ -46,8 +46,16 @@ interface ListProps {
 
 function ConversationList({ onBack, onOpen }: ListProps) {
   const { ctx } = useStory();
+
+  // Unread contacts first, then in unlock order
   const contacts = Object.values(story.contacts as Record<string, Contact>)
-    .filter(c => ctx.unlockedContacts.includes(c.id));
+    .filter(c => ctx.unlockedContacts.includes(c.id))
+    .sort((a, b) => {
+      const aRead = ctx.readContacts.includes(a.id);
+      const bRead = ctx.readContacts.includes(b.id);
+      if (aRead !== bRead) return aRead ? 1 : -1;
+      return ctx.unlockedContacts.indexOf(a.id) - ctx.unlockedContacts.indexOf(b.id);
+    });
 
   return (
     <motion.div
@@ -69,10 +77,14 @@ function ConversationList({ onBack, onOpen }: ListProps) {
           <p className="text-center text-ios-label3 text-[14px] mt-8">No messages yet.</p>
         )}
         {contacts.map(contact => {
+          const unread = !ctx.readContacts.includes(contact.id);
+          const isDark = contact.id === 'jordan' && ctx.flags['jordan_dark'];
+          const isSignalOffline = contact.id === 'signal' && ctx.flags['signal_offline'];
+          const isMOffline = contact.id === 'm' && ctx.flags['m_offline'];
           const conv = getConversation(contact.id);
           const currentNodeId = ctx.currentNodes[contact.id] ?? conv.startNodeId;
           const node = getNode(conv, currentNodeId);
-          const preview = node?.messages[0]?.text ?? '…';
+          const preview = isDark ? '[DATE REDACTED]' : (isMOffline ? 'Going dark.' : (isSignalOffline ? 'Contact offline.' : (node?.messages[0]?.text ?? '…')));
 
           return (
             <button
@@ -84,25 +96,60 @@ function ConversationList({ onBack, onOpen }: ListProps) {
                 active:bg-ios-surface transition-colors
               "
             >
-              {/* Avatar */}
+              {/* Avatar — corrupted for dark contacts */}
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-[16px] shrink-0"
-                style={{ background: contact.color }}
+                className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-[16px] shrink-0 ${isDark ? 'bg-ios-surface2' : ''}`}
+                style={isDark ? {} : { background: contact.color }}
               >
-                {contact.initials}
+                {isDark
+                  ? <span className="text-ios-label3 text-[20px] font-mono">?</span>
+                  : <span className="text-white">{contact.initials}</span>
+                }
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-[16px] font-semibold text-ios-label truncate">{contact.name}</span>
-                  <span className="text-[13px] text-ios-label3 ml-2 shrink-0">now</span>
+                  <span className={`text-[16px] truncate ${unread ? 'font-bold' : 'font-semibold'} ${isDark || isSignalOffline || isMOffline ? 'text-ios-label3' : 'text-ios-label'}`}>
+                    {contact.name}
+                  </span>
+                  <span className={`text-[13px] ml-2 shrink-0 ${isDark ? 'text-red-800 font-mono text-[11px]' : 'text-ios-label3'}`}>
+                    {isDark ? 'FAILED' : 'now'}
+                  </span>
                 </div>
-                <p className="text-[14px] text-ios-label3 truncate mt-0.5">{preview}</p>
+                <p className={`text-[14px] truncate mt-0.5 ${isDark ? 'text-red-900 font-mono text-[12px]' : unread ? 'text-ios-label font-medium' : 'text-ios-label3'}`}>
+                  {preview}
+                </p>
               </div>
+              {unread && !isDark && <div className="w-2.5 h-2.5 rounded-full bg-ios-blue shrink-0"/>}
+              {isDark && <div className="w-2.5 h-2.5 rounded-full bg-red-800 shrink-0 animate-pulse"/>}
             </button>
           );
         })}
       </div>
     </motion.div>
+  );
+}
+
+// ─── History Bubble (read-only past messages) ────────────────────────────────
+
+function HistoryBubble({ message }: { message: HistoryMessage }) {
+  const isAlex = message.sender === 'alex';
+  return (
+    <div className={`flex w-full ${isAlex ? 'justify-end' : 'justify-start'} opacity-50`}>
+      <div className="flex flex-col gap-0.5 max-w-[72%]">
+        <div className={`
+          px-3 py-2 rounded-2xl text-[14px] leading-snug
+          ${isAlex
+            ? 'bg-ios-surface2 text-ios-label2 rounded-br-sm'
+            : 'bg-ios-surface text-ios-label3 rounded-bl-sm'
+          }
+        `}>
+          {message.text}
+        </div>
+        <p className={`text-[10px] text-ios-label3 ${isAlex ? 'text-right' : 'text-left'} px-1`}>
+          {message.timestamp}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -114,7 +161,7 @@ interface ViewProps {
 }
 
 function ConversationView({ contactId, onBack }: ViewProps) {
-  const { ctx, completeNode, makeChoice, applyEffects } = useStory();
+  const { ctx, completeNode, makeChoice, applyEffects, markContactRead } = useStory();
   const contact = getContact(contactId);
   const conv = getConversation(contactId);
 
@@ -129,10 +176,14 @@ function ConversationView({ contactId, onBack }: ViewProps) {
 
   const currentNodeId = ctx.currentNodes[contactId] ?? conv.startNodeId;
 
+  // Mark as read when opened
+  useEffect(() => {
+    markContactRead(contactId);
+  }, [contactId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Rebuild message history from completedNodes + current node
   const buildHistory = useCallback((): StoryMessage[] => {
     const msgs: StoryMessage[] = [];
-    // Walk the conversation tree in order to collect messages for all completed nodes
     const visited = new Set<string>();
     const walk = (nodeId: string) => {
       if (visited.has(nodeId) || !ctx.completedNodes.includes(nodeId)) return;
@@ -140,10 +191,14 @@ function ConversationView({ contactId, onBack }: ViewProps) {
       const node = getNode(conv, nodeId);
       if (!node) return;
       msgs.push(...node.messages);
-      // If player made a choice at this node, follow that branch
       const choiceId = ctx.choices[nodeId];
       if (choiceId && node.choices) {
         const chosen = node.choices.find(c => c.id === choiceId);
+        // Restore the player's choice text into history
+        const choiceText = ctx.choiceTexts[nodeId];
+        if (choiceText) {
+          msgs.push({ id: `choice_${choiceId}`, sender: 'player', text: choiceText, delay: 0 });
+        }
         if (chosen) walk(chosen.nextNodeId);
       } else if (node.autoAdvance?.nextNodeId) {
         walk(node.autoAdvance.nextNodeId);
@@ -151,7 +206,7 @@ function ConversationView({ contactId, onBack }: ViewProps) {
     };
     walk(conv.startNodeId);
     return msgs;
-  }, [ctx.completedNodes, ctx.choices, conv, contactId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ctx.completedNodes, ctx.choices, ctx.choiceTexts, conv, contactId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Animate new node messages in sequence ─────────────────────────────────
 
@@ -261,7 +316,7 @@ function ConversationView({ contactId, onBack }: ViewProps) {
 
     // Advance machine (marks current node complete, moves to next)
     setTimeout(() => {
-      makeChoice(currentNodeId, contactId, choice.id, choice.nextNodeId, choice.effects);
+      makeChoice(currentNodeId, contactId, choice.id, choice.nextNodeId, choice.effects, choice.text);
     }, 400);
   };
 
@@ -275,7 +330,7 @@ function ConversationView({ contactId, onBack }: ViewProps) {
     >
       {/* Header */}
       <StatusBar />
-      <div className="flex items-center gap-3 px-3 pb-3 border-b border-ios-separator">
+      <div className="flex items-center gap-3 px-3 pb-4 border-b border-ios-separator">
         <button onClick={onBack} className="text-ios-blue text-[15px] px-1 py-1">← Back</button>
         <div className="flex-1 flex flex-col items-center">
           <div
@@ -285,17 +340,34 @@ function ConversationView({ contactId, onBack }: ViewProps) {
             {contact.initials}
           </div>
           <span className="text-[13px] font-semibold text-ios-label">{contact.name}</span>
+          <span className="text-[10px] text-ios-label3 mt-0.5">Responding as: J. Reyes</span>
         </div>
         <div className="w-16"/>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-3 py-4 flex flex-col gap-2">
+      <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-4 flex flex-col gap-2">
+        {/* Static history — read-only prior messages between Alex and this contact */}
+        {conv.history && conv.history.length > 0 && (
+          <>
+            <p className="text-center text-[11px] text-ios-label3 py-2 mb-1">
+              Before Alex disappeared
+            </p>
+            {(conv.history as HistoryMessage[]).map(msg => (
+              <HistoryBubble key={msg.id} message={msg} />
+            ))}
+            <div className="text-center text-[11px] text-ios-label3 py-3 mt-1 border-t border-ios-separator border-b mb-2">
+              Alex Chen&apos;s phone found 3 days later — now in your hands
+            </div>
+          </>
+        )}
         {visibleMessages.map((msg, i) => (
           <MessageBubble
             key={msg.id}
             message={msg}
             isLast={i === visibleMessages.length - 1}
+            contactColor={contact.color}
+            contactInitials={contact.initials}
           />
         ))}
         <AnimatePresence>

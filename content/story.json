@@ -1,46 +1,58 @@
 {
-  "version": "1.0",
+  "version": "3.0",
   "title": "The Vanishing",
   "subtitle": "Alex Chen has been missing for three days. You found their phone.",
 
   "apps": [
-    { "id": "chat",    "label": "Messages", "icon": "chat",    "unlocked": true,  "order": 0 },
-    { "id": "gallery", "label": "Photos",   "icon": "gallery", "unlocked": false, "order": 1 },
-    { "id": "files",   "label": "Files",    "icon": "files",   "unlocked": false, "order": 2 }
+    { "id": "chat",       "label": "Messages",    "icon": "chat",     "unlocked": true,  "order": 0 },
+    { "id": "gallery",    "label": "Photos",      "icon": "gallery",  "unlocked": false, "order": 1 },
+    { "id": "files",      "label": "Files",       "icon": "files",    "unlocked": false, "order": 2 },
+    { "id": "call_trace", "label": "Call Trace",  "icon": "trace",    "unlocked": false, "order": 3 },
+    { "id": "recovery",   "label": "Recovery",    "icon": "recovery", "unlocked": false, "order": 4 }
   ],
 
   "contacts": {
-    "jordan": { "id": "jordan", "name": "Jordan K.",   "initials": "JK", "color": "#818cf8", "unlocked": true  },
-    "m":      { "id": "m",      "name": "M",           "initials": "M",  "color": "#34d399", "unlocked": false },
-    "editor": { "id": "editor", "name": "R. Navarro",  "initials": "RN", "color": "#fbbf24", "unlocked": false },
-    "dana":   { "id": "dana",   "name": "Dana P.",     "initials": "DP", "color": "#f472b6", "unlocked": false }
+    "jordan":  { "id": "jordan",  "name": "Jordan K.",  "initials": "JK", "color": "#818cf8", "unlocked": true  },
+    "m":       { "id": "m",       "name": "M",          "initials": "M",  "color": "#34d399", "unlocked": false },
+    "editor":  { "id": "editor",  "name": "R. Navarro", "initials": "RN", "color": "#fbbf24", "unlocked": false },
+    "dana":    { "id": "dana",    "name": "Dana P.",    "initials": "DP", "color": "#f472b6", "unlocked": false },
+    "unknown": { "id": "unknown", "name": "Unknown",    "initials": "?",  "color": "#ef4444", "unlocked": false },
+    "signal":  { "id": "signal",  "name": "SIGNAL",     "initials": "S",  "color": "#a855f7", "unlocked": false },
+    "alex":    { "id": "alex",    "name": "Alex Chen",  "initials": "AC", "color": "#64748b", "unlocked": false }
   },
 
   "conversations": {
     "jordan": {
       "contactId": "jordan",
       "startNodeId": "jordan_01",
+      "history": [
+        { "id": "jh_1", "sender": "contact", "text": "hey, you coming to the team thing thursday?",    "timestamp": "Mar 18, 7:32 PM" },
+        { "id": "jh_2", "sender": "alex",    "text": "can't make it. working on something.",            "timestamp": "Mar 18, 7:58 PM" },
+        { "id": "jh_3", "sender": "contact", "text": "ok weirdo. drinks sunday then?",                  "timestamp": "Mar 18, 8:01 PM" },
+        { "id": "jh_4", "sender": "alex",    "text": "maybe. don't make plans around me.",              "timestamp": "Mar 19, 10:14 AM" },
+        { "id": "jh_5", "sender": "contact", "text": "...you ok?",                                      "timestamp": "Mar 21, 9:55 PM" }
+      ],
       "nodes": {
         "jordan_01": {
           "id": "jordan_01",
           "messages": [
-            { "id": "j01_1", "sender": "contact", "text": "Alex?",                                                           "delay": 0    },
-            { "id": "j01_2", "sender": "contact", "text": "hey where are you, you missed the team thing last night",          "delay": 1200 },
-            { "id": "j01_3", "sender": "contact", "text": "I'm getting a really weird feeling",                              "delay": 2400 },
-            { "id": "j01_4", "sender": "contact", "text": "are you okay??",                                                   "delay": 3600 }
+            { "id": "j01_1", "sender": "contact", "text": "Alex?",                                               "delay": 0    },
+            { "id": "j01_2", "sender": "contact", "text": "hey where are you, you missed the team thing last night", "delay": 1200 },
+            { "id": "j01_3", "sender": "contact", "text": "I'm getting a really weird feeling",                  "delay": 2400 },
+            { "id": "j01_4", "sender": "contact", "text": "are you okay??",                                      "delay": 3600 }
           ],
           "choices": [
             {
               "id": "j01_c1",
-              "text": "I'm fine. Don't worry about me.",
+              "text": "Jordan — this isn't Alex. My name is J. Reyes. Alex sent me this phone. Are you safe?",
               "nextNodeId": "jordan_02a",
               "effects": []
             },
             {
               "id": "j01_c2",
-              "text": "Jordan. If I don't text you by Thursday — call Detective Reyes. 555-0148. Don't ask why.",
+              "text": "I can't say much over text. Are you somewhere safe right now?",
               "nextNodeId": "jordan_02b",
-              "effects": [{ "type": "set_flag", "flag": "told_jordan_detective", "value": true }]
+              "effects": []
             }
           ]
         },
@@ -48,23 +60,23 @@
         "jordan_02a": {
           "id": "jordan_02a",
           "messages": [
-            { "id": "j02a_1", "sender": "contact", "text": "that is literally what someone NOT fine would say",               "delay": 0    },
-            { "id": "j02a_2", "sender": "contact", "text": "your editor called ME, btw",                                     "delay": 1500 },
-            { "id": "j02a_3", "sender": "contact", "text": "Navarro said you missed a deadline. that's never happened",      "delay": 2400 },
-            { "id": "j02a_4", "sender": "contact", "text": "I'm coming over tonight unless you give me a real answer",       "delay": 3400 }
+            { "id": "j02a_1", "sender": "contact", "text": "what",                                               "delay": 0    },
+            { "id": "j02a_2", "sender": "contact", "text": "who is this",                                        "delay": 800  },
+            { "id": "j02a_3", "sender": "contact", "text": "where is ALEX",                                      "delay": 1600 },
+            { "id": "j02a_4", "sender": "contact", "text": "what do you mean they sent you the phone",           "delay": 2800 }
           ],
           "choices": [
             {
               "id": "j02a_c1",
-              "text": "Do NOT come over. I'll explain when I can.",
+              "text": "I'm a journalist. Alex trusted me with this. Tell me everything you know about what they were working on.",
               "nextNodeId": "jordan_03",
               "effects": []
             },
             {
               "id": "j02a_c2",
-              "text": "Fine. Ring three times so I know it's you.",
+              "text": "I'm so sorry. I don't have answers yet — only more questions. I need your help.",
               "nextNodeId": "jordan_03",
-              "effects": [{ "type": "set_flag", "flag": "jordan_coming_over", "value": true }]
+              "effects": []
             }
           ]
         },
@@ -72,14 +84,21 @@
         "jordan_02b": {
           "id": "jordan_02b",
           "messages": [
-            { "id": "j02b_1", "sender": "contact", "text": "Alex what the hell",                                             "delay": 0    },
-            { "id": "j02b_2", "sender": "contact", "text": "who is Detective Reyes",                                        "delay": 1000 },
-            { "id": "j02b_3", "sender": "contact", "text": "you're scaring me",                                             "delay": 2000 }
+            { "id": "j02b_1", "sender": "contact", "text": "that is literally what someone NOT fine would say",   "delay": 0    },
+            { "id": "j02b_2", "sender": "contact", "text": "your editor called ME, btw",                          "delay": 1500 },
+            { "id": "j02b_3", "sender": "contact", "text": "Navarro said you missed a deadline. that's never happened", "delay": 2400 },
+            { "id": "j02b_4", "sender": "contact", "text": "I'm coming over tonight unless you give me a real answer", "delay": 3400 }
           ],
           "choices": [
             {
               "id": "j02b_c1",
-              "text": "Trust me. Don't ask questions over text.",
+              "text": "Jordan. This isn't Alex. My name is J. Reyes. Alex sent me this phone before disappearing.",
+              "nextNodeId": "jordan_03",
+              "effects": []
+            },
+            {
+              "id": "j02b_c2",
+              "text": "Please don't come over. It's not safe. I'll explain when I can.",
               "nextNodeId": "jordan_03",
               "effects": []
             }
@@ -89,11 +108,54 @@
         "jordan_03": {
           "id": "jordan_03",
           "messages": [
-            { "id": "j03_1", "sender": "contact", "text": "ok.",                                                             "delay": 0    },
-            { "id": "j03_2", "sender": "contact", "text": "but you owe me the longest explanation of your life",            "delay": 1400 },
-            { "id": "j03_3", "sender": "contact", "text": "please be safe",                                                 "delay": 2200 }
+            { "id": "j03_1", "sender": "contact", "text": "oh god",                                              "delay": 0    },
+            { "id": "j03_2", "sender": "contact", "text": "ok",                                                   "delay": 1200 },
+            { "id": "j03_3", "sender": "contact", "text": "alex said something. two weeks ago.",                  "delay": 2400 },
+            { "id": "j03_4", "sender": "contact", "text": "said — 'if anything happens to me, get it to J. Reyes'", "delay": 3800 },
+            { "id": "j03_5", "sender": "contact", "text": "I thought they were being dramatic",                   "delay": 5400 }
           ],
-          "effects": [{ "type": "unlock_contact", "contactId": "m" }]
+          "choices": [
+            {
+              "id": "j03_c1",
+              "text": "What was Alex investigating? Did they mention Veridian?",
+              "nextNodeId": "jordan_04",
+              "effects": []
+            },
+            {
+              "id": "j03_c2",
+              "text": "Has anyone been asking about Alex? Someone you didn't recognize?",
+              "nextNodeId": "jordan_04",
+              "effects": []
+            }
+          ]
+        },
+
+        "jordan_04": {
+          "id": "jordan_04",
+          "messages": [
+            { "id": "j04_1", "sender": "contact", "text": "yeah. veridian.",                                      "delay": 0    },
+            { "id": "j04_2", "sender": "contact", "text": "there was a woman at the Meridian Press Club thing last month", "delay": 1400 },
+            { "id": "j04_3", "sender": "contact", "text": "she knew alex's name. their beat.",                    "delay": 2600 },
+            { "id": "j04_4", "sender": "contact", "text": "she mentioned Veridian specifically",                  "delay": 3600 },
+            { "id": "j04_5", "sender": "contact", "text": "I told myself it was a PR person doing opposition research", "delay": 5000 },
+            { "id": "j04_6", "sender": "contact", "text": "I should have told alex",                              "delay": 6200 }
+          ],
+          "effects": [{ "type": "unlock_contact", "contactId": "m" }],
+          "autoAdvance": { "nextNodeId": "jordan_going_dark", "delay": 3000 }
+        },
+
+        "jordan_going_dark": {
+          "id": "jordan_going_dark",
+          "messages": [
+            { "id": "jgd_1", "sender": "contact", "text": "wait",                                                 "delay": 0    },
+            { "id": "jgd_2", "sender": "contact", "text": "there's someone outside my building",                  "delay": 2800 },
+            { "id": "jgd_3", "sender": "contact", "text": "i think i'm being followed",                           "delay": 5000 },
+            { "id": "jgd_4", "sender": "contact", "text": "don't contact me on this numb\u2014",                  "delay": 7200 }
+          ],
+          "effects": [
+            { "type": "set_flag",       "flag": "jordan_dark",  "value": true  },
+            { "type": "unlock_contact", "contactId": "unknown" }
+          ]
         }
       }
     },
@@ -101,27 +163,114 @@
     "m": {
       "contactId": "m",
       "startNodeId": "m_01",
+      "history": [
+        { "id": "mh_1", "sender": "contact", "text": "package confirmed",                "timestamp": "Mar 14, 11:32 PM" },
+        { "id": "mh_2", "sender": "alex",    "text": "understood. tuesday still?",       "timestamp": "Mar 14, 11:45 PM" },
+        { "id": "mh_3", "sender": "contact", "text": "tuesday. stay dark until then.",   "timestamp": "Mar 15, 12:02 AM" }
+      ],
       "nodes": {
         "m_01": {
           "id": "m_01",
           "messages": [
-            { "id": "m01_1", "sender": "contact", "text": "Package received.",                                              "delay": 0    },
-            { "id": "m01_2", "sender": "contact", "text": "Story goes live Tuesday.",                                      "delay": 1500 },
-            { "id": "m01_3", "sender": "contact", "text": "Stay dark until then. Don't use this number again.",            "delay": 2600 }
+            { "id": "m01_1", "sender": "contact", "text": "Package received.",                                   "delay": 0    },
+            { "id": "m01_2", "sender": "contact", "text": "Story goes live Tuesday.",                            "delay": 1500 },
+            { "id": "m01_3", "sender": "contact", "text": "Stay dark until then. Don't use this number again.", "delay": 2600 }
           ],
           "autoAdvance": { "nextNodeId": "m_02", "delay": 2000 }
         },
+
         "m_02": {
           "id": "m_02",
           "messages": [
-            { "id": "m02_1", "sender": "contact", "text": "I saw what Vance sent you.",                                    "delay": 0    },
-            { "id": "m02_2", "sender": "contact", "text": "Don't respond to him. Don't meet him alone.",                   "delay": 1600 },
-            { "id": "m02_3", "sender": "contact", "text": "The source is protected. That's what matters.",                 "delay": 2800 }
+            { "id": "m02_1", "sender": "contact", "text": "I saw what Vance sent you.",                          "delay": 0    },
+            { "id": "m02_2", "sender": "contact", "text": "Don't respond to him. Don't meet him alone.",         "delay": 1600 },
+            { "id": "m02_3", "sender": "contact", "text": "Wait.",                                               "delay": 3200 },
+            { "id": "m02_4", "sender": "contact", "text": "Who is this.",                                        "delay": 4400 },
+            { "id": "m02_5", "sender": "contact", "text": "This isn't Alex's cadence.",                          "delay": 5600 }
+          ],
+          "choices": [
+            {
+              "id": "m02_c1",
+              "text": "Page 4 of the escrow file. The exclusivity clause, §4.2. Alex had it.",
+              "nextNodeId": "m_verified",
+              "effects": []
+            },
+            {
+              "id": "m02_c2",
+              "text": "My name is J. Reyes. Alex sent me this phone. I'm trying to finish what they started.",
+              "nextNodeId": "m_suspicious",
+              "effects": []
+            }
+          ]
+        },
+
+        "m_verified": {
+          "id": "m_verified",
+          "messages": [
+            { "id": "mv_1", "sender": "contact", "text": "...",                                                   "delay": 0    },
+            { "id": "mv_2", "sender": "contact", "text": "You found the file.",                                   "delay": 2000 },
+            { "id": "mv_3", "sender": "contact", "text": "Alex said you were sharp.",                             "delay": 3400 },
+            { "id": "mv_4", "sender": "contact", "text": "The source is protected. That's what matters.",         "delay": 4800 }
           ],
           "effects": [
             { "type": "unlock_app",     "appId":     "gallery" },
             { "type": "unlock_contact", "contactId": "editor"  }
+          ],
+          "autoAdvance": { "nextNodeId": "m_offline", "delay": 5000 }
+        },
+
+        "m_suspicious": {
+          "id": "m_suspicious",
+          "messages": [
+            { "id": "ms_1", "sender": "contact", "text": "Prove it.",                                            "delay": 0    },
+            { "id": "ms_2", "sender": "contact", "text": "What's on page 4 of the escrow file?",                 "delay": 1600 }
+          ],
+          "choices": [
+            {
+              "id": "ms_c1",
+              "text": "The exclusivity clause. §4.2. 'Veridian retains all rights in perpetuity.'",
+              "nextNodeId": "m_verified_late",
+              "effects": []
+            },
+            {
+              "id": "ms_c2",
+              "text": "I haven't found the files yet.",
+              "nextNodeId": "m_shutdown",
+              "effects": []
+            }
           ]
+        },
+
+        "m_verified_late": {
+          "id": "m_verified_late",
+          "messages": [
+            { "id": "mvl_1", "sender": "contact", "text": "Good.",                                               "delay": 0    },
+            { "id": "mvl_2", "sender": "contact", "text": "The source is protected. That's what matters.",       "delay": 1600 }
+          ],
+          "effects": [
+            { "type": "unlock_app",     "appId":     "gallery" },
+            { "type": "unlock_contact", "contactId": "editor"  }
+          ],
+          "autoAdvance": { "nextNodeId": "m_offline", "delay": 3000 }
+        },
+
+        "m_shutdown": {
+          "id": "m_shutdown",
+          "messages": [
+            { "id": "msd_1", "sender": "contact", "text": "Don't contact this number again.", "delay": 0 }
+          ],
+          "effects": [{ "type": "set_flag", "flag": "m_offline", "value": true }]
+        },
+
+        "m_offline": {
+          "id": "m_offline",
+          "messages": [
+            { "id": "moff_1", "sender": "contact", "text": "Going dark.",                                        "delay": 0    },
+            { "id": "moff_2", "sender": "contact", "text": "This number is burned as of tonight.",                "delay": 2000 },
+            { "id": "moff_3", "sender": "contact", "text": "Story runs Tuesday regardless of what happens.",      "delay": 4000 },
+            { "id": "moff_4", "sender": "contact", "text": "Don't look for me.",                                  "delay": 5500 }
+          ],
+          "effects": [{ "type": "set_flag", "flag": "m_offline", "value": true }]
         }
       }
     },
@@ -129,51 +278,91 @@
     "editor": {
       "contactId": "editor",
       "startNodeId": "editor_01",
+      "history": [
+        { "id": "eh_1", "sender": "contact", "text": "Chen. Veridian piece needs to be filed by Friday or I'm pulling the slot.", "timestamp": "Apr 10, 3:22 PM" },
+        { "id": "eh_2", "sender": "alex",    "text": "Friday. I'll have it.",                                                      "timestamp": "Apr 10, 3:31 PM" },
+        { "id": "eh_3", "sender": "contact", "text": "I mean it this time. Legal is breathing down my neck.",                     "timestamp": "Apr 11, 9:08 AM" }
+      ],
       "nodes": {
         "editor_01": {
           "id": "editor_01",
           "messages": [
-            { "id": "e01_1", "sender": "contact", "text": "Alex. I need the Veridian copy by 5pm today.",                  "delay": 0    },
-            { "id": "e01_2", "sender": "contact", "text": "I've held the slot for three days. Legal has reviewed.",        "delay": 1400 },
+            { "id": "e01_1", "sender": "contact", "text": "Alex. I need the Veridian copy by 5pm today.",                        "delay": 0    },
+            { "id": "e01_2", "sender": "contact", "text": "I've held the slot for three days. Legal has reviewed.",              "delay": 1400 },
             { "id": "e01_3", "sender": "contact", "text": "If I don't hear from you, I'm running it without your byline and crediting Park.", "delay": 3000 }
           ],
           "choices": [
             {
               "id": "e01_c1",
-              "text": "Run it. Don't use my name. Keep Dana out of the headline.",
+              "text": "This isn't Alex. I'm J. Reyes — Alex sent me this phone. The story is real. You need to protect the source.",
               "nextNodeId": "editor_02a",
-              "effects": [
-                { "type": "set_flag", "flag": "story_runs_anonymous", "value": true },
-                { "type": "unlock_app", "appId": "files" }
-              ]
+              "effects": []
             },
             {
               "id": "e01_c2",
-              "text": "Hold it. Give me 48 hours. I have more.",
+              "text": "Hold the story. Alex is missing. Do not run anything until you know they're safe.",
               "nextNodeId": "editor_02b",
-              "effects": [
-                { "type": "set_flag", "flag": "story_held", "value": true }
-              ]
+              "effects": [{ "type": "set_flag", "flag": "story_held", "value": true }]
             }
           ]
         },
+
         "editor_02a": {
           "id": "editor_02a",
           "messages": [
-            { "id": "e02a_1", "sender": "contact", "text": "Done. Goes live at midnight.",                                  "delay": 0    },
-            { "id": "e02a_2", "sender": "contact", "text": "Source is protected. So is everything else.",                   "delay": 1400 },
-            { "id": "e02a_3", "sender": "contact", "text": "Alex — whatever you're mixed up in. Get out of the city.",     "delay": 2800 }
+            { "id": "e02a_1", "sender": "contact", "text": "...",                                                                 "delay": 0    },
+            { "id": "e02a_2", "sender": "contact", "text": "If this is some kind of leak operation I will have your credentials pulled.", "delay": 1600 },
+            { "id": "e02a_3", "sender": "contact", "text": "Verify yourself. What's the source's name on the whistleblower agreement?", "delay": 3200 }
           ],
-          "effects": [{ "type": "unlock_contact", "contactId": "dana" }]
+          "choices": [
+            {
+              "id": "e02a_c1",
+              "text": "Dana Park. The agreement is in the files on this device. Tribune legal signed it.",
+              "nextNodeId": "editor_03a",
+              "effects": []
+            },
+            {
+              "id": "e02a_c2",
+              "text": "I don't have that information yet.",
+              "nextNodeId": "editor_03b_dead",
+              "effects": []
+            }
+          ]
         },
+
+        "editor_03a": {
+          "id": "editor_03a",
+          "messages": [
+            { "id": "e03a_1", "sender": "contact", "text": "...",                                                                 "delay": 0    },
+            { "id": "e03a_2", "sender": "contact", "text": "Alright.",                                                           "delay": 1600 },
+            { "id": "e03a_3", "sender": "contact", "text": "I'm going to need you to tell me exactly what happened to Alex.",    "delay": 2800 },
+            { "id": "e03a_4", "sender": "contact", "text": "Not for print. Off the record.",                                     "delay": 3800 },
+            { "id": "e03a_5", "sender": "contact", "text": "And whoever you are — Alex trusted you. That's not nothing.",       "delay": 5400 }
+          ],
+          "effects": [
+            { "type": "unlock_app",     "appId":     "files" },
+            { "type": "unlock_contact", "contactId": "dana"  }
+          ]
+        },
+
+        "editor_03b_dead": {
+          "id": "editor_03b_dead",
+          "messages": [
+            { "id": "e03b_1", "sender": "contact", "text": "Don't contact this number again.", "delay": 0 }
+          ]
+        },
+
         "editor_02b": {
           "id": "editor_02b",
           "messages": [
-            { "id": "e02b_1", "sender": "contact", "text": "48 hours.",                                                     "delay": 0    },
-            { "id": "e02b_2", "sender": "contact", "text": "Not a minute more.",                                            "delay": 1000 },
-            { "id": "e02b_3", "sender": "contact", "text": "And Alex — I've been getting calls asking about you. Be careful.", "delay": 2000 }
+            { "id": "e02b_1", "sender": "contact", "text": "48 hours.",                                                          "delay": 0    },
+            { "id": "e02b_2", "sender": "contact", "text": "Not a minute more.",                                                 "delay": 1000 },
+            { "id": "e02b_3", "sender": "contact", "text": "And whoever you are — I've been getting calls asking about Alex. Be careful.", "delay": 2200 }
           ],
-          "effects": [{ "type": "unlock_contact", "contactId": "dana" }]
+          "effects": [
+            { "type": "unlock_app",     "appId":     "files" },
+            { "type": "unlock_contact", "contactId": "dana"  }
+          ]
         }
       }
     },
@@ -185,44 +374,289 @@
         "dana_01": {
           "id": "dana_01",
           "messages": [
-            { "id": "d01_1", "sender": "contact", "text": "is this still alex's number",                                   "delay": 0    },
-            { "id": "d01_2", "sender": "contact", "text": "I saw someone outside my building this morning",                "delay": 1600 },
-            { "id": "d01_3", "sender": "contact", "text": "they knew my name",                                             "delay": 2400 },
-            { "id": "d01_4", "sender": "contact", "text": "what do I do",                                                  "delay": 3200 }
+            { "id": "d01_1", "sender": "contact", "text": "who has this phone",                                   "delay": 0    },
+            { "id": "d01_2", "sender": "contact", "text": "this isn't alex",                                      "delay": 1200 },
+            { "id": "d01_3", "sender": "contact", "text": "Veridian?",                                            "delay": 2400 },
+            { "id": "d01_4", "sender": "contact", "text": "I know you're monitoring this number. Leave me alone.", "delay": 3800 }
           ],
           "choices": [
             {
               "id": "d01_c1",
-              "text": "Call Detective Reyes right now. Tell her you're a source in the Veridian story. She'll protect you.",
+              "text": "I'm not Veridian. My name is J. Reyes. Alex trusted me with this phone. You're safe.",
               "nextNodeId": "dana_02a",
-              "effects": [{ "type": "set_flag", "flag": "dana_protected", "value": true }]
+              "effects": []
             },
             {
               "id": "d01_c2",
-              "text": "Don't go home tonight. Leave the city if you can. Delete this thread when you're safe.",
+              "text": "Dana — I need your help. I'm trying to find Alex.",
               "nextNodeId": "dana_02b",
               "effects": []
             }
           ]
         },
+
         "dana_02a": {
           "id": "dana_02a",
           "messages": [
-            { "id": "d02a_1", "sender": "contact", "text": "ok",                                                           "delay": 0    },
-            { "id": "d02a_2", "sender": "contact", "text": "ok I'll call",                                                 "delay": 800  },
-            { "id": "d02a_3", "sender": "contact", "text": "thank you alex",                                               "delay": 1600 },
-            { "id": "d02a_4", "sender": "contact", "text": "please come back",                                             "delay": 2400 }
+            { "id": "d02a_1", "sender": "contact", "text": "...",                                                  "delay": 0    },
+            { "id": "d02a_2", "sender": "contact", "text": "J. Reyes",                                             "delay": 1600 },
+            { "id": "d02a_3", "sender": "contact", "text": "alex mentioned you once",                              "delay": 2800 },
+            { "id": "d02a_4", "sender": "contact", "text": "said if anything happened—",                           "delay": 4200 },
+            { "id": "d02a_5", "sender": "contact", "text": "oh god. it happened didn't it.",                       "delay": 5600 }
           ],
-          "effects": [{ "type": "set_flag", "flag": "story_complete", "value": true }]
+          "choices": [
+            {
+              "id": "d02a_c1",
+              "text": "Alex is missing. But the story is real. You're protected — the agreement is on this phone.",
+              "nextNodeId": "dana_03",
+              "effects": []
+            },
+            {
+              "id": "d02a_c2",
+              "text": "I don't know what happened yet. But I'm going to find out.",
+              "nextNodeId": "dana_03",
+              "effects": []
+            }
+          ]
         },
+
         "dana_02b": {
           "id": "dana_02b",
           "messages": [
-            { "id": "d02b_1", "sender": "contact", "text": "okay",                                                         "delay": 0    },
-            { "id": "d02b_2", "sender": "contact", "text": "i'm scared",                                                   "delay": 1000 },
-            { "id": "d02b_3", "sender": "contact", "text": "find me when this is over",                                    "delay": 2000 }
+            { "id": "d02b_1", "sender": "contact", "text": "how do I know you're not Veridian",                   "delay": 0    },
+            { "id": "d02b_2", "sender": "contact", "text": "they've been watching this number",                    "delay": 1600 },
+            { "id": "d02b_3", "sender": "contact", "text": "I saw someone outside my building this morning",       "delay": 2800 },
+            { "id": "d02b_4", "sender": "contact", "text": "they knew my name. not the agreement name. my real name.", "delay": 3800 }
+          ],
+          "choices": [
+            {
+              "id": "d02b_c1",
+              "text": "Because Veridian wouldn't ask. They'd just show up. I'm asking.",
+              "nextNodeId": "dana_03",
+              "effects": []
+            },
+            {
+              "id": "d02b_c2",
+              "text": "Leave the city tonight. Don't go home. The story will be protected.",
+              "nextNodeId": "dana_03b",
+              "effects": []
+            }
+          ]
+        },
+
+        "dana_03": {
+          "id": "dana_03",
+          "messages": [
+            { "id": "d03_1", "sender": "contact", "text": "okay",                                                  "delay": 0    },
+            { "id": "d03_2", "sender": "contact", "text": "I saw someone outside my building this morning",        "delay": 1200 },
+            { "id": "d03_3", "sender": "contact", "text": "they knew my name. not the agreement name. my real name.", "delay": 2400 },
+            { "id": "d03_4", "sender": "contact", "text": "what do I do",                                          "delay": 3800 }
+          ],
+          "choices": [
+            {
+              "id": "d03_c1",
+              "text": "Leave the city tonight. Don't use your credit cards. I'll protect the story from here.",
+              "nextNodeId": "dana_04a",
+              "effects": [{ "type": "set_flag", "flag": "dana_protected", "value": true }]
+            },
+            {
+              "id": "d03_c2",
+              "text": "Stay put. Document everything. Your name is protected under the agreement.",
+              "nextNodeId": "dana_04b",
+              "effects": []
+            }
+          ]
+        },
+
+        "dana_03b": {
+          "id": "dana_03b",
+          "messages": [
+            { "id": "d03b_1", "sender": "contact", "text": "okay",                                                 "delay": 0    },
+            { "id": "d03b_2", "sender": "contact", "text": "okay I'm going",                                       "delay": 800  },
+            { "id": "d03b_3", "sender": "contact", "text": "please find alex",                                     "delay": 1600 },
+            { "id": "d03b_4", "sender": "contact", "text": "find me when this is over",                            "delay": 2400 }
+          ],
+          "effects": [
+            { "type": "set_flag", "flag": "dana_protected", "value": true },
+            { "type": "set_flag", "flag": "story_complete",  "value": true }
+          ]
+        },
+
+        "dana_04a": {
+          "id": "dana_04a",
+          "messages": [
+            { "id": "d04a_1", "sender": "contact", "text": "okay",                                                 "delay": 0    },
+            { "id": "d04a_2", "sender": "contact", "text": "I'm scared",                                           "delay": 800  },
+            { "id": "d04a_3", "sender": "contact", "text": "please find alex",                                     "delay": 1600 },
+            { "id": "d04a_4", "sender": "contact", "text": "find me when this is over",                            "delay": 2400 }
           ],
           "effects": [{ "type": "set_flag", "flag": "story_complete", "value": true }]
+        },
+
+        "dana_04b": {
+          "id": "dana_04b",
+          "messages": [
+            { "id": "d04b_1", "sender": "contact", "text": "ok",                                                   "delay": 0    },
+            { "id": "d04b_2", "sender": "contact", "text": "ok I'll stay",                                         "delay": 800  },
+            { "id": "d04b_3", "sender": "contact", "text": "thank you",                                            "delay": 1600 },
+            { "id": "d04b_4", "sender": "contact", "text": "please find alex",                                     "delay": 2400 }
+          ],
+          "effects": [{ "type": "set_flag", "flag": "story_complete", "value": true }]
+        }
+      }
+    },
+
+    "unknown": {
+      "contactId": "unknown",
+      "startNodeId": "unk_01",
+      "nodes": {
+        "unk_01": {
+          "id": "unk_01",
+          "messages": [
+            { "id": "u01_1", "sender": "contact", "text": "You found it.",                                         "delay": 0    },
+            { "id": "u01_2", "sender": "contact", "text": "Good.",                                                  "delay": 1200 },
+            { "id": "u01_3", "sender": "contact", "text": "Don't trust Dana.",                                      "delay": 2800 },
+            { "id": "u01_4", "sender": "contact", "text": "Run a trace on this number before you reply to anyone.", "delay": 4500 }
+          ],
+          "choices": [
+            {
+              "id": "u01_c1",
+              "text": "Who is this?",
+              "nextNodeId": "unk_02",
+              "effects": []
+            },
+            {
+              "id": "u01_c2",
+              "text": "How do you have this number?",
+              "nextNodeId": "unk_02",
+              "effects": []
+            }
+          ]
+        },
+        "unk_02": {
+          "id": "unk_02",
+          "messages": [
+            { "id": "u02_1", "sender": "contact", "text": "Run the trace.",                                        "delay": 0    },
+            { "id": "u02_2", "sender": "contact", "text": "You'll understand when you do.",                        "delay": 1800 }
+          ],
+          "effects": [
+            { "type": "unlock_app",     "appId":     "call_trace" },
+            { "type": "unlock_contact", "contactId": "signal"     }
+          ]
+        }
+      }
+    },
+
+    "signal": {
+      "contactId": "signal",
+      "startNodeId": "sig_01",
+      "nodes": {
+        "sig_01": {
+          "id": "sig_01",
+          "messages": [
+            { "id": "s01_1", "sender": "contact", "text": "The trace gave you an answer you weren't ready for.",   "delay": 0    },
+            { "id": "s01_2", "sender": "contact", "text": "Burner. Carrier: Prepaid. Registered: A. CHEN.",        "delay": 2200 },
+            { "id": "s01_3", "sender": "contact", "text": "Purchase date: March 3rd.",                             "delay": 3800 },
+            { "id": "s01_4", "sender": "contact", "text": "Seven weeks before Alex disappeared.",                  "delay": 5200 }
+          ],
+          "choices": [
+            {
+              "id": "s01_c1",
+              "text": "Alex set this up intentionally.",
+              "nextNodeId": "sig_02",
+              "effects": []
+            },
+            {
+              "id": "s01_c2",
+              "text": "You're lying. Who are you?",
+              "nextNodeId": "sig_02",
+              "effects": []
+            }
+          ]
+        },
+        "sig_02": {
+          "id": "sig_02",
+          "messages": [
+            { "id": "s02_1", "sender": "contact", "text": "The disappearance was staged.",                         "delay": 0    },
+            { "id": "s02_2", "sender": "contact", "text": "Alex needed Veridian to expose themselves. To come after someone.", "delay": 2200 },
+            { "id": "s02_3", "sender": "contact", "text": "You were the someone.",                                 "delay": 4000 },
+            { "id": "s02_4", "sender": "contact", "text": "You've been the instrument of a trap since you picked up that phone.", "delay": 5800 },
+            { "id": "s02_5", "sender": "contact", "text": "Dana knew the entire time. Check the archive in Photos.", "delay": 7500 }
+          ],
+          "effects": [
+            { "type": "set_flag",   "flag": "midpoint_twist", "value": true },
+            { "type": "unlock_app", "appId": "recovery" }
+          ],
+          "choices": [
+            {
+              "id": "s02_c1",
+              "text": "I was used as bait.",
+              "nextNodeId": "sig_03",
+              "effects": []
+            },
+            {
+              "id": "s02_c2",
+              "text": "Does Alex know what Veridian would do to me?",
+              "nextNodeId": "sig_03",
+              "effects": []
+            }
+          ]
+        },
+        "sig_03": {
+          "id": "sig_03",
+          "messages": [
+            { "id": "s03_1", "sender": "contact", "text": "They've been watching you through that phone since you picked it up.", "delay": 0 },
+            { "id": "s03_2", "sender": "contact", "text": "Three files were deleted from the device remotely. Four minutes ago.", "delay": 2800 },
+            { "id": "s03_3", "sender": "contact", "text": "They know you know.",                                   "delay": 5000 },
+            { "id": "s03_4", "sender": "contact", "text": "You have time to recover what matters. Use the Recovery app.", "delay": 7000 }
+          ],
+          "effects": [
+            { "type": "set_flag", "flag": "veridian_watching",      "value": true },
+            { "type": "set_flag", "flag": "files_deleted_remotely", "value": true }
+          ],
+          "autoAdvance": { "nextNodeId": "sig_04", "delay": 6000 }
+        },
+        "sig_04": {
+          "id": "sig_04",
+          "messages": [
+            { "id": "s04_1", "sender": "contact", "text": "This contact goes dark in 60 seconds.",                 "delay": 0    },
+            { "id": "s04_2", "sender": "contact", "text": "Find the encrypted thread. Recover what you can.",      "delay": 2500 },
+            { "id": "s04_3", "sender": "contact", "text": "When you're ready — there is one more message waiting.", "delay": 5000 },
+            { "id": "s04_4", "sender": "contact", "text": "From Alex.",                                            "delay": 7000 }
+          ],
+          "effects": [
+            { "type": "set_flag",       "flag": "signal_offline", "value": true },
+            { "type": "unlock_contact", "contactId": "alex" }
+          ]
+        }
+      }
+    },
+
+    "alex": {
+      "contactId": "alex",
+      "startNodeId": "alex_01",
+      "nodes": {
+        "alex_01": {
+          "id": "alex_01",
+          "messages": [
+            { "id": "a01_1", "sender": "contact", "text": "I know you're reading this.",                           "delay": 0     },
+            { "id": "a01_2", "sender": "contact", "text": "This message was scheduled. I wrote it three weeks ago.", "delay": 3000 },
+            { "id": "a01_3", "sender": "contact", "text": "If you're seeing it, it means Veridian found you.",     "delay": 6000  },
+            { "id": "a01_4", "sender": "contact", "text": "It means I underestimated how far they'd go.",          "delay": 8500  },
+            { "id": "a01_5", "sender": "contact", "text": "I'm sorry.",                                            "delay": 11000 },
+            { "id": "a01_6", "sender": "contact", "text": "There is a way out. The desk. The notebook. Page 7.",   "delay": 14000 }
+          ],
+          "effects": [{ "type": "set_flag", "flag": "act2_complete", "value": true }],
+          "autoAdvance": { "nextNodeId": "alex_02", "delay": 4000 }
+        },
+        "alex_02": {
+          "id": "alex_02",
+          "messages": [
+            { "id": "a02_1", "sender": "contact", "text": "DEVICE SECURED BY OWNER",    "delay": 0    },
+            { "id": "a02_2", "sender": "contact", "text": "Remote lock initiated.",      "delay": 2000 },
+            { "id": "a02_3", "sender": "contact", "text": "All sessions terminated.",    "delay": 3500 }
+          ],
+          "effects": [{ "type": "set_flag", "flag": "remote_locked", "value": true }]
         }
       }
     }
@@ -231,28 +665,158 @@
   "gallery": {
     "items": [
       {
-        "id": "g_01",
-        "type": "screenshot",
-        "label": "Email from Vance's Office",
-        "description": "\"Mr. Vance requests a private meeting at your earliest convenience. He believes your current project could benefit from additional context. Please respond by end of week.\"",
-        "color": "#1c1c1e",
-        "date": "Apr 14"
-      },
-      {
-        "id": "g_02",
-        "type": "document",
-        "label": "Veridian Internal — AC Monitoring",
-        "description": "Contact confirmed at Tribune Media building (14/04, 17/04). One known associate identified — building manager, S. Okafor. Recommend escalation to Phase 2 at principal's discretion.",
-        "color": "#1c1c1e",
-        "date": "Apr 17"
-      },
-      {
-        "id": "g_03",
+        "id": "g_garage",
         "type": "photo",
-        "label": "Outside Tribune — Parked Sedan",
-        "description": "Plates: 7XTK 291. Photographed on three separate days. Same vehicle.",
+        "label": "Parking Garage — Apr 14",
+        "description": "Shot from behind a concrete pillar. Two figures in conversation. One wears a Veridian Systems lanyard. Partial plate visible on nearby black sedan.",
+        "imagePath": "/gallery/g_garage.jpg",
+        "clue": {
+          "label": "Partial plate: 7TRB-",
+          "text": "The sedan was photographed on three separate dates outside Tribune Media. Someone at Veridian was maintaining physical surveillance on Alex."
+        },
         "color": "#1c1c1e",
-        "date": "Apr 18"
+        "date": "Apr 14",
+        "hidden": false
+      },
+      {
+        "id": "g_desk",
+        "type": "photo",
+        "label": "Alex's Desk — Apr 18",
+        "description": "Flash photo of Alex's desk, taken before they left. Laptop closed, press badge, cold coffee. A sticky note is pinned to the monitor bezel.",
+        "imagePath": "/gallery/g_desk.jpg",
+        "clue": {
+          "label": "Sticky note reads: V3R1D14N",
+          "text": "This is the passphrase for thread_backup.enc in the Files app."
+        },
+        "color": "#1c1c1e",
+        "date": "Apr 18",
+        "hidden": false
+      },
+      {
+        "id": "g_doc",
+        "type": "photo",
+        "label": "Document — Page 4",
+        "description": "Close-up photograph of a page from the Veridian escrow agreement. A red pen has circled a clause twice.",
+        "imagePath": "/gallery/g_doc.jpg",
+        "clue": {
+          "label": "§4.2 EXCLUSIVITY AGREEMENT — circled in red",
+          "text": "The clause M asked about. Veridian claimed exclusive ownership over all source-submitted materials — including whistleblower documents. This is the legal hook that makes the story explosive."
+        },
+        "color": "#1c1c1e",
+        "date": "Apr 10",
+        "hidden": false
+      },
+      {
+        "id": "g_reflection",
+        "type": "photo",
+        "label": "Tribune Building — Exterior",
+        "description": "Street-level shot of the Tribune Media building. Overcast day. Ordinary exterior — but examine the ground-floor window reflection.",
+        "imagePath": "/gallery/g_reflection.jpg",
+        "clue": {
+          "label": "Figure in window reflection",
+          "text": "A figure across the street is pointing a camera at the building. Alex was being surveilled from outside the Tribune. This photo proves it."
+        },
+        "color": "#1c1c1e",
+        "date": "Apr 17",
+        "hidden": false
+      },
+      {
+        "id": "g_chat_screenshot",
+        "type": "screenshot",
+        "label": "Signal Chat Screenshot",
+        "description": "Screenshot of a Signal conversation. Contact name redacted with black bar. Most messages blurred — one line is partially readable.",
+        "imagePath": "/gallery/g_chat_screenshot.jpg",
+        "clue": {
+          "label": "Readable text: '…level 3. Tuesday. Come alone.'",
+          "text": "This is the meeting M kept referencing. Parking level 3. The Tuesday that appears in M's message history and the escrow file date are the same day."
+        },
+        "color": "#1c1c1e",
+        "date": "Apr 15",
+        "hidden": false
+      },
+      {
+        "id": "g_package",
+        "type": "photo",
+        "label": "The Package",
+        "description": "A padded brown envelope on a wooden desk. Natural morning light. No return address. A Tribune business card tucked under the string.",
+        "imagePath": "/gallery/g_package.jpg",
+        "clue": {
+          "label": "Addressed to: J. REYES — Alex's handwriting",
+          "text": "Alex addressed this to you specifically, weeks before disappearing. This was never an accident. You were chosen."
+        },
+        "color": "#1c1c1e",
+        "date": "Apr 19",
+        "hidden": false
+      },
+      {
+        "id": "g_h01",
+        "type": "corrupted",
+        "label": "File001.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "Photograph of a hotel room — bed unmade, curtains drawn. A surveillance camera is mounted in the smoke detector on the ceiling. Handwritten note on the nightstand: \"Phase 2 authorized.\"",
+        "color": "#1c1c1e",
+        "date": "Apr 12",
+        "hidden": true
+      },
+      {
+        "id": "g_h02",
+        "type": "corrupted",
+        "label": "File002.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "Exterior of a glass office tower — Veridian Group corporate headquarters. Photographed at night. Several floors are lit. One window has a figure standing, looking out.",
+        "color": "#1c1c1e",
+        "date": "Apr 13",
+        "hidden": true
+      },
+      {
+        "id": "g_h03",
+        "type": "corrupted",
+        "label": "File003.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "A dark sedan — plates: 7TRB-291 — parked outside a residential building. A woman is walking toward the entrance. Her face is partially obscured, but her lanyard badge reads TRIBUNE MEDIA.",
+        "color": "#1c1c1e",
+        "date": "Apr 14",
+        "hidden": true
+      },
+      {
+        "id": "g_h04",
+        "type": "corrupted",
+        "label": "File004.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "Documents spread across a table — visible text: \"PHASE 2 — ACTIVE SUBJECT MONITORING — SUBJECT: A. CHEN\". A hand rests on the papers. A coffee ring stain over the subject's name.",
+        "color": "#1c1c1e",
+        "date": "Apr 15",
+        "hidden": true
+      },
+      {
+        "id": "g_h05",
+        "type": "corrupted",
+        "label": "File005.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "A street at night — Jordan Kim's street, recognizable by the blue awning of the corner deli. A figure stands under a lamppost, watching the building entrance.",
+        "color": "#1c1c1e",
+        "date": "Apr 16",
+        "hidden": true
+      },
+      {
+        "id": "g_h06",
+        "type": "corrupted",
+        "label": "File006.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "A burner phone in a plastic evidence bag. Label: \"Purchased March 3 — PREPAID — Registered: A. CHEN.\" The bag is on a desk that also holds a coffee cup and a reporter's notebook.",
+        "color": "#1c1c1e",
+        "date": "Apr 17",
+        "hidden": true
+      },
+      {
+        "id": "g_h07",
+        "type": "corrupted",
+        "label": "File007.jpg",
+        "description": "[CORRUPTED — RECONSTRUCTION REQUIRED]",
+        "reconstructedContent": "Alex Chen and Dana Park, sitting across from each other at Meridian Café. Alex is smiling. Dana is looking at documents spread between them — the Veridian whistleblower files.\n\nMetadata timestamp: April 19 — 7:42 AM.\n\nThe morning Alex disappeared.\n\nThey were never strangers. They were planning.",
+        "color": "#1c1c1e",
+        "date": "Apr 19 — 7:42 AM",
+        "hidden": true
       }
     ]
   },
@@ -265,7 +829,7 @@
         "type": "txt",
         "size": "2 KB",
         "date": "Apr 18",
-        "content": "If you're reading this, something went wrong.\n\nThe story is filed. Navarro has a backup copy. So does Tribune legal.\n\nVance knows I have the Monitoring Summary. He knows about Dana.\n\nBalcony key is under the desk. Don't use the front door.\n\nK. Reyes — she's one of us. Trust her.\n\n— A"
+        "content": "If you're reading this, something went wrong.\n\nThe story is filed. Navarro has a backup copy. So does Tribune legal.\n\nVance knows I have the Monitoring Summary. He knows about Dana.\n\nBalcony key is under the desk. Don't use the front door.\n\nJ. Reyes — she's one of us. Trust her.\n\n— A"
       },
       {
         "id": "f_02",
@@ -282,7 +846,99 @@
         "size": "156 KB",
         "date": "Apr 10",
         "content": "WHISTLEBLOWER PROTECTION AGREEMENT\n\nTribune Media Group agrees to protect the identity of source DANA PARK in perpetuity under applicable shield laws and Dodd-Frank provisions. Source has provided documentation of alleged securities violations by Veridian Group LLC.\n\nSigned: Alex Chen, Reporter | Tribune Legal Dept."
+      },
+      {
+        "id": "f_04",
+        "name": "legal_fwd.txt",
+        "type": "txt",
+        "size": "3 KB",
+        "date": "Apr 16",
+        "content": "---------- Forwarded message ----------\nDate: Apr 15, 11:42 PM\nSubject: Re: Veridian — Legal Review [CONFIDENTIAL]\n\n\"Received formal notice from Veridian Group counsel this afternoon. Claims: defamation, tortious interference. Seeking pre-publication injunction. Recommend holding publication pending 48hr counsel review. Do not inform reporter at this stage — may complicate the decision.\"\n\n[No sender. Arrived via encrypted drop.]\n\n---\nNote — A.C., Apr 16:\nNavarro knows. The 48-hour offer isn't editorial. She's stalling while legal decides whether to kill it.\n\nThe story runs regardless. That's what the backup is for."
+      },
+      {
+        "id": "f_05",
+        "name": "draft_04-17.txt",
+        "type": "txt",
+        "size": "1 KB",
+        "date": "Apr 17",
+        "content": "[UNSENT DRAFT]\n\nI keep starting this and deleting it.\n\nI don't know how to say I'm sorry for putting you here without it sounding like what it is — me needing absolution.\n\nThe agreement is real. Reyes is real. You are protected on paper.\n\nWhat I did — filing before the story was fully verified — that was for you, not for the story. I need you to know that.\n\nIf something happens to me before Tuesday: Reyes has everything. Tribune legal has everything. The story runs regardless.\n\nYou're going to be okay.\n\n— A"
+      },
+      {
+        "id": "f_06",
+        "name": "thread_backup.enc",
+        "type": "enc",
+        "size": "12 KB",
+        "date": "Apr 19",
+        "content": "[ENCRYPTED THREAD — PASSWORD REQUIRED]\n\nThis file contains a backed-up private message thread.\n\nAccess requires a passphrase. Check Photos — Alex left a note.\n\n[Hint: look at the desk photo]",
+        "pinProtected": true,
+        "pin": "V3R1D14N",
+        "decryptedContent": "PRIVATE THREAD — A.CHEN \u2194 D.PARK (Encrypted Channel)\n\nAlex:  The plan is set. Tuesday.\nDana:  Veridian will come after you.\nAlex:  That's the point. They come after me, we document everything in real time. Someone finds the phone — they get the full picture.\nDana:  And if the wrong person finds it?\nAlex:  I've set messages to auto-send to the right people at the right time. It's handled.\nDana:  The source protection holds no matter what?\nAlex:  Tribune legal confirmed. You're protected regardless of what happens to me.\nDana:  I still think this is insane.\nAlex:  I know.\nDana:  I'm in.\nAlex:  I know that too.\n\n[THREAD END — Apr 15, 11:58 PM]"
+      },
+      {
+        "id": "f_07",
+        "name": "trash_log.txt",
+        "type": "txt",
+        "size": "1 KB",
+        "date": "Apr 19",
+        "content": "SYSTEM LOG — REMOTE FILE OPERATIONS\n\n[Apr 19 — Today]\n\n3 files deleted by remote administrator:\n\n1. veridian_board_minutes.pdf\n   Status: DELETED — Unrecoverable\n\n2. source_identity.enc\n   Status: DELETED — Partial header recoverable\n\n3. exit_plan_final.txt\n   Status: DELETED — Partial recovery possible\n\nUse the Recovery app to attempt file reconstruction."
       }
     ]
+  },
+
+  "deletedFiles": [
+    {
+      "id": "del_01",
+      "name": "veridian_board_minutes.pdf",
+      "recoverable": false,
+      "partialContent": "[FILE HEADER ONLY]\n\nVERIDIAN GROUP LLC\nBOARD OF DIRECTORS — PRIVATE SESSION\nAPRIL 11\n\nATTENDEES: R. VANCE (CHAIR), [REDACTED], [REDACTED]\nAGENDA ITEM 3: MEDIA THREAT MITIGATION\n\n[REMAINDER OF FILE UNRECOVERABLE]"
+    },
+    {
+      "id": "del_02",
+      "name": "source_identity.enc",
+      "recoverable": true,
+      "partialContent": "[PARTIAL RECOVERY — FILE HEADER + FOOTER]\n\n[AES-256 ENCRYPTED]\nSUBJECT CODENAME: SIGNAL\nCLEARANCE: TRIBUNE LEGAL EYES ONLY\n\n...[encrypted body — 4,218 bytes unrecoverable]...\n\n[FOOTER]\nIdentity confirmed. Disposition: PROTECTED.\nContact: J. Reyes, Freelance Investigator."
+    },
+    {
+      "id": "del_03",
+      "name": "exit_plan_final.txt",
+      "recoverable": true,
+      "partialContent": "[PARTIAL RECOVERY]\n\nIF DEVICE IS FOUND BY VERIDIAN:\nDo not turn it off. Leave it running.\nThey are watching. Let them watch.\n\nIF DEVICE IS FOUND BY ANYONE ELSE:\nYou are not in danger yet.\nBut you will be soon.\n\nThe notebook. Page 7.\n\n...[middle section unrecoverable]...\n\nThe story was always going to cost someone something.\nI made sure it wouldn't cost you everything.\n— A"
+    }
+  ],
+
+  "callTraceData": {
+    "unknown": {
+      "number": "+1 (555) 019-3847",
+      "carrier": "PREPAID / BURNER",
+      "registered": "A. CHEN",
+      "purchaseDate": "March 3",
+      "deviceStatus": "OFFLINE",
+      "lastPing": "Apr 19 — 06:14 AM",
+      "location": "UNAVAILABLE"
+    },
+    "jordan": {
+      "number": "+1 (555) 204-7731",
+      "carrier": "AT&T",
+      "registered": "JORDAN S. KIM",
+      "deviceStatus": "OFFLINE",
+      "lastPing": "Apr 19 — [TIMESTAMP CORRUPTED]",
+      "location": "LAST KNOWN: District 4"
+    },
+    "m": {
+      "number": "+1 (555) 883-2291",
+      "carrier": "PREPAID / BURNER",
+      "registered": "UNREGISTERED",
+      "deviceStatus": "DESTROYED",
+      "lastPing": "SIGNAL TERMINATED",
+      "location": "UNAVAILABLE"
+    },
+    "signal": {
+      "number": "ENCRYPTED CHANNEL",
+      "carrier": "UNKNOWN PROTOCOL",
+      "registered": "UNTRACEABLE",
+      "deviceStatus": "ACTIVE",
+      "lastPing": "REAL-TIME",
+      "location": "ROUTING THROUGH 7 NODES — UNTRACEABLE"
+    }
   }
 }
