@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import StatusBar from '@/components/phone/StatusBar';
 import { useClock } from '@/hooks/useClock';
@@ -85,15 +85,53 @@ function NotesApp({ onBack }: { onBack: () => void }) {
   );
 }
 
-function MessagesApp({ onBack }: { onBack: () => void }) {
-  const messages = useDanaMessages();
-  const [myMsg, setMyMsg] = useState('');
-  const [sent, setSent] = useState<string[]>([]);
+interface ChatMessage {
+  sender: 'me' | 'them';
+  text: string;
+}
 
-  const send = () => {
-    if (!myMsg.trim()) return;
-    setSent(prev => [...prev, myMsg.trim()]);
+function MessagesApp({ onBack }: { onBack: () => void }) {
+  const scriptedMessages = useDanaMessages();
+  const [myMsg, setMyMsg] = useState('');
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, isTyping]);
+
+  const allMessages: ChatMessage[] = [
+    ...scriptedMessages.map(m => ({ sender: m.sender === 'me' ? 'me' as const : 'them' as const, text: m.text })),
+    ...chatHistory,
+  ];
+
+  const send = async () => {
+    const text = myMsg.trim();
+    if (!text || isTyping) return;
     setMyMsg('');
+    setChatHistory(prev => [...prev, { sender: 'me', text }]);
+    setIsTyping(true);
+
+    try {
+      const apiHistory = chatHistory.map(m => ({
+        role: m.sender === 'me' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactId: 'dana', message: text, history: apiHistory }),
+      });
+      const data = await res.json();
+      if (data.text) {
+        setChatHistory(prev => [...prev, { sender: 'them', text: data.text }]);
+      }
+    } catch {
+      setChatHistory(prev => [...prev, { sender: 'them', text: 'no signal. try again.' }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -114,18 +152,18 @@ function MessagesApp({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-2">
-        {messages.length === 0 && (
+        {allMessages.length === 0 && (
           <p className="text-center text-gray-400 text-[13px] mt-8">No messages yet. Progress the story to receive messages here.</p>
         )}
-        {messages.map((msg, i) => (
+        {allMessages.map((msg, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.15 }}
+            transition={{ delay: i < scriptedMessages.length ? i * 0.15 : 0 }}
             className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-[14px] leading-snug ${
+            <div className={`max-w-[72%] px-3 py-2 rounded-2xl text-[14px] leading-snug ${
               msg.sender === 'me'
                 ? 'bg-blue-500 text-white rounded-br-sm'
                 : 'bg-gray-100 text-gray-900 rounded-bl-sm'
@@ -134,17 +172,29 @@ function MessagesApp({ onBack }: { onBack: () => void }) {
             </div>
           </motion.div>
         ))}
-        {sent.map((text, i) => (
-          <motion.div key={`sent_${i}`} className="flex justify-end" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="max-w-[75%] px-3 py-2 rounded-2xl bg-blue-500 text-white text-[14px] leading-snug rounded-br-sm">
-              {text}
+        {isTyping && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-start"
+          >
+            <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1 items-center">
+              {[0, 1, 2].map(i => (
+                <motion.div
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-gray-400"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+                />
+              ))}
             </div>
           </motion.div>
-        ))}
+        )}
+        <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      {messages.length > 0 && (
+      {/* Input — always visible once scripted messages appear */}
+      {scriptedMessages.length > 0 && (
         <div className="flex items-center gap-2 px-3 pb-4 pt-2 border-t border-gray-200">
           <input
             className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-[14px] text-gray-800 outline-none"
@@ -152,8 +202,9 @@ function MessagesApp({ onBack }: { onBack: () => void }) {
             value={myMsg}
             onChange={e => setMyMsg(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && send()}
+            disabled={isTyping}
           />
-          {myMsg.trim() && (
+          {myMsg.trim() && !isTyping && (
             <button onClick={send} className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-[14px]">↑</button>
           )}
         </div>
